@@ -23,7 +23,7 @@ pyvercheck python3
 
 if [ "$pyuni" = "python3" ]
 then
-    echo "Then installed Pytohn on this Mac is $pyuni with the version $piver1"
+    echo "Then installed Python on this Mac is $pyuni with the version $piver1"
 else
     echo "No python found"
 fi
