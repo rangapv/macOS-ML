@@ -6,7 +6,6 @@ import coremltools as ct
 
 from PIL import Image
 
-
 # Download class labels (from a separate file)
 import urllib
 import urllib.request
@@ -35,11 +34,15 @@ classifier_config = ct.ClassifierConfig(class_labels)
 
 #keras_model = model2.keras
 
+model = ct.convert('model2.keras',convert_to="mlprogram", 
+                   compute_precision=ct.precision.FLOAT32)
+
 # Convert the model using the Unified Conversion API to an ML Program
 model = ct.convert(
    'model2.keras',
     source='tensorflow',
     inputs=[image_input],
+    minimum_deployment_target=macOS12,
     classifier_config=classifier_config,
 )
 

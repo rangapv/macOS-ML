@@ -3,8 +3,10 @@
 #21-07-25
 
 source <(curl -s https://raw.githubusercontent.com/rangapv/ansible-install/refs/heads/main/pyverchk.sh) >/dev/null 2>&1
+source <(curl -s https://raw.githubusercontent.com/rangapv/ansible-install/refs/heads/main/libraries.sh ) >/dev/null 2>&1
 
 pyflg="0"
+cm1="brew"
 
 quick_python(){
 
@@ -21,9 +23,20 @@ if [ -z "$pyuni" ]
 then
    echo "No python present going to install version $qpv"
 else
-   echo "Current python is $pyuni"
+   echo "Current python is `${pyuni} --version`"
    pyflg="1"
-   exit
+   echo "If you requested a different version then press 'y'"
+   read resp1
+   if  [[ "$resp1" == "y" ]]
+   then
+     pyflg="0"
+     sudo $cm1 -y install gcc make wget libffi-dev 
+     zlibadd
+     sslupdate $cm1 
+     packages $cm1
+   else
+     exit
+   fi
 fi
 
 echo "Installing Python version $qpv"
@@ -87,7 +100,7 @@ then
 fi
 }
 
-quick_python 3.13.5
+quick_python 3.12.0
 
 pipinstall
 
