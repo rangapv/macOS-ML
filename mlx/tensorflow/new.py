@@ -3,13 +3,15 @@
 #11-08-25
 
 import coremltools as ct
+import ssl
 
 from PIL import Image
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 # Download class labels (from a separate file)
 import urllib
 import urllib.request
-
 label_url = 'https://storage.googleapis.com/download.tensorflow.org/data/ImageNetLabels.txt'
 class_labels = urllib.request.urlopen(label_url).read().splitlines()
 class_labels = class_labels[1:] # remove the first class which is background
@@ -19,8 +21,6 @@ assert len(class_labels) == 1000
 for i, label in enumerate(class_labels):
   if isinstance(label, bytes):
     class_labels[i] = label.decode("utf8")
-
-
 
 # Define the input type as image, 
 # set pre-processing parameters to normalize the image 
@@ -34,15 +34,14 @@ classifier_config = ct.ClassifierConfig(class_labels)
 
 #keras_model = model2.keras
 
-model = ct.convert('model2.keras',convert_to="mlprogram", 
-                   compute_precision=ct.precision.FLOAT32)
+#model = ct.convert('model2.keras',convert_to="mlprogram", 
+#                   compute_precision=ct.precision.FLOAT32)
 
 # Convert the model using the Unified Conversion API to an ML Program
 model = ct.convert(
    'model2.keras',
     source='tensorflow',
     inputs=[image_input],
-    minimum_deployment_target=macOS12,
     classifier_config=classifier_config,
 )
 
