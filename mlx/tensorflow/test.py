@@ -3,6 +3,9 @@
 #14-08-25
 
 import tensorflow as tf
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 cifar = tf.keras.datasets.cifar100
 (x_train, y_train), (x_test, y_test) = cifar.load_data()

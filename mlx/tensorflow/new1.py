@@ -4,17 +4,18 @@
 
 import coremltools as ct
 import ssl
+import tensorflow as tf
 
 from PIL import Image
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-
-
-
-
-
-
+# Download MobileNetv2 (using tf.keras)
+keras_model = tf.keras.applications.MobileNetV2(
+    weights="imagenet", 
+    input_shape=(224, 224, 3,),
+    classes=1000,
+)
 
 # Download class labels (from a separate file)
 import urllib
@@ -39,24 +40,28 @@ image_input = ct.ImageType(shape=(1, 224, 224, 3,),
 # set class labels
 classifier_config = ct.ClassifierConfig(class_labels)
 
-#keras_model = model2.keras
-
-#model = ct.convert('model2.keras',convert_to="mlprogram", 
+# Convert the model using the Unified Conversion API to an ML Program
+#model = ct.convert('keras_model',convert_to="mlprogram",inputs=[image_input], 
+#    classifier_config=classifier_config, 
 #                   compute_precision=ct.precision.FLOAT32)
 
-# Convert the model using the Unified Conversion API to an ML Program
 model = ct.convert(
-   'model2.h5',
-    source='tensorflow',
-    inputs=[image_input],
+    keras_model, 
+    inputs=[image_input], 
     classifier_config=classifier_config,
 )
+
+#model = ct.convert(
+#   'model2.h5',
+#    source='tensorflow',
+#    inputs=[image_input],
+#    classifier_config=classifier_config,
+#)
 
 # Print a message showing the model was converted.
 print('Model converted to an ML Program')
 
-
-# Use PIL to load and resize the image to expected size
+#example_image = Image.open("./daisy.jpg").resize((224, 224))
 example_image = Image.open("./beach.jpg").resize((224, 224))
 
 # Make a prediction using Core ML
@@ -64,3 +69,4 @@ out_dict = model.predict({"input_1": example_image})
 
 # Print out top-1 prediction
 print(out_dict["classLabel"])
+
