@@ -1,0 +1,4 @@
+typing
+mlx-transformers
+transformers
+transformers[torch]
