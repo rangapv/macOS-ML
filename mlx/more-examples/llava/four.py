@@ -2,12 +2,12 @@
 #author:rangapv@yahoo.com
 #27-04-26
 
-
 from PIL import Image
 from transformers import AutoProcessor, LlavaForConditionalGeneration
 
 model = LlavaForConditionalGeneration.from_pretrained("llava-hf/llava-1.5-7b-hf")
 processor = AutoProcessor.from_pretrained("llava-hf/llava-1.5-7b-hf")
+file1 = Image.open("/Users/rangaswamypv/rangapv/macOD-ML/mlx/tensorflow/daisy.jpg")
 
 def mesg1():
    input1 = input("USER:")
@@ -15,15 +15,13 @@ def mesg1():
        {
         "role": "user",
         "content": [
-            {"type": "image", "url": "https://static01.nyt.com/images/2023/07/21/multimedia/21baguettesrex-hbkc/21baguettesrex-hbkc-videoSixteenByNineJumbo1600.jpg"},
+            {"type": "image", "image": file1},
             {"type": "text", "text": input1}
         ]   
        }
    ]   
-  # m1 = message.append(m2)   
    m1 = m2
-   #print(f"inside mesg1 {m1}")
-   #message = m1
+   print(f"inside mesg1 {m1}")
    return m1
    
 while True:
