@@ -4,9 +4,11 @@
 
 from PIL import Image
 from transformers import AutoProcessor, LlavaForConditionalGeneration
-
-model = LlavaForConditionalGeneration.from_pretrained("llava-hf/llava-1.5-7b-hf")
-processor = AutoProcessor.from_pretrained("llava-hf/llava-1.5-7b-hf")
+#model1="liuhaotian/llava-v1.6-vicuna-7b"
+model1="llava-hf/llava-1.5-7b-hf"
+#model1="llava-hf/llava-onevision-qwen2-0.5b-ov-hf"
+model = LlavaForConditionalGeneration.from_pretrained(model1)
+processor = AutoProcessor.from_pretrained(model1)
 file1 = Image.open("/Users/rangaswamypv/rangapv/macOD-ML/mlx/tensorflow/daisy.jpg")
 
 def mesg1():
@@ -21,7 +23,7 @@ def mesg1():
        }
    ]   
    m1 = m2
-   print(f"inside mesg1 {m1}")
+   #print(f"inside mesg1 {m1}")
    return m1
    
 while True:
