@@ -6,7 +6,7 @@ import torch
 from transformers import AutoProcessor, LlavaForConditionalGeneration
 
 model1="llava-hf/llava-1.5-7b-hf"
-device = torch.device("cuda")
+device = torch.device("mps" if torch.backends.cuda.is_available() else "cpu")
 
 model = LlavaForConditionalGeneration.from_pretrained(model1).to(device)
 processor = AutoProcessor.from_pretrained(model1)
@@ -20,24 +20,22 @@ def mesg1():
         "content": [
             {"type": "image", "url": url1},
             {"type": "text", "text": input1}
-        ]   
+        ]
        }
-   ]   
+   ]
    m1 = m2
    #print(f"inside mesg1 {m1}")
    return m1
- 
-def sample(logits, temperature=0.0):
-    if temperature == 0.0:
-        return torch.argmax(logits, dim=-1)
-    probs = torch.softmax(logits / temperature, dim=-1)
-    return torch.multinomial(probs, num_samples=1).squeeze(-1)
 
+def sample(logits, temperature=0.0):
+    if temperature == 0:
+        return mlx.argmax(logits, axis=-1)
+    else:
+        return random.categorical(logits * (1 / temperature))
 
 while True:
  message = mesg1()
- #print(f"inside while {message}")
- inputs = processor.apply_chat_template(
+inputs = processor.apply_chat_template(
     message,
     tokenize=True,
     return_dict=True,
@@ -75,5 +73,4 @@ while True:
  w1 = "ASSISTANT:"
  indx = result1.find(w1)
  result2 = result1[indx:]
- #print(f"result2 is {result2}")
- print(result2)
+print(result2)
