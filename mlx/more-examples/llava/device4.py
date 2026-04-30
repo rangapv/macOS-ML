@@ -29,7 +29,7 @@ def mesg1():
  
 def sample(logits, temperature=0.0):
     if temperature == 0:
-        return argmax(logits, axis=-1)
+        return torch.argmax(logits, axis=-1)
     else:
         return random.categorical(logits * (1 / temperature))
    
@@ -53,7 +53,7 @@ while True:
  logits = logits[:, -1, :]
  y = sample(logits, temperature=temperature)
  tokens = [y.item()]
-
+ max_tokens = 200
 
  for n in range(max_tokens - 1):
         logits, cache = model.language_model(y[None], cache=cache)
