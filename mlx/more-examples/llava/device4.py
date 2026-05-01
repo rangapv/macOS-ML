@@ -50,7 +50,7 @@ while True:
  input_ids=inputs["input_ids"]
  pixel_values=inputs["pixel_values"]
  temperature = 0.0
- logits, cache , _ = model(input_ids, pixel_values)
+ #logits, cache , _ = model(input_ids, pixel_values)
  outputs1 = model(input_ids, pixel_values)
  logits =outputs1.logits[:, -1, :]
  y = sample(logits, temperature=temperature)
@@ -58,8 +58,9 @@ while True:
  max_tokens = 200
 
  for n in range(max_tokens - 1):
-        logits, cache = model.language_model(y[None], cache=cache)
-        logits = logits[:, -1, :]
+        outputs2 = model(y[None])
+        #logits, cache = model(y[None], cache=cache)
+        logits = outputs2.logits[:, -1, :]
         y = sample(logits, temperature)
         token = y.item()
         if token == processor.tokenizer.eos_token_id:
@@ -67,7 +68,7 @@ while True:
         tokens.append(token)
 
  result3 = processor.tokenizer.decode(tokens)
-
+ print(f"result3 is {result3} and of zero si {result3[0]}")
  #generate_ids = model.generate(**inputs,max_new_tokens=200)
 # result = processor.decode(generate_ids, skip_special_tokens=True)
  #print(f"result is {result}")
