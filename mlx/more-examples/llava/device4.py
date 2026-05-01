@@ -53,12 +53,15 @@ while True:
  #logits, cache , _ = model(input_ids, pixel_values)
  outputs1 = model(input_ids, pixel_values)
  logits =outputs1.logits[:, -1, :]
+ cache = outputs1.past_key_values
  y = sample(logits, temperature=temperature)
  tokens = [y.item()]
  max_tokens = 200
 
+ result3 = processor.tokenizer.decode(tokens)
+
  for n in range(max_tokens - 1):
-        outputs2 = model(y[None])
+        outputs2 = model(input_ids=y[None, None], past_key_values=cache)
         #logits, cache = model(y[None], cache=cache)
         logits = outputs2.logits[:, -1, :]
         y = sample(logits, temperature)
