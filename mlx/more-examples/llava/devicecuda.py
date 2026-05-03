@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+#author:rangapv@yahoo.com
+#03-05-2026
 
 import torch
 import requests, io
@@ -22,9 +24,7 @@ processor = AutoProcessor.from_pretrained(model_name)
 # -------------------------------------------------
 # 2️⃣  Load the image once (the same image for every turn)
 # -------------------------------------------------
-url = "https://static01.nyt.com/images/2023/07/21/multimedia/21baguettesrex-hbkc/21baguettesrex-hbkc-videoSixteenByNineJumbo1600.jpg"
-resp = requests.get(url)
-img = Image.open(io.BytesIO(resp.content)).convert("RGB")
+url1 = "https://static01.nyt.com/images/2023/07/21/multimedia/21baguettesrex-hbkc/21baguettesrex-hbkc-videoSixteenByNineJumbo1600.jpg"
 
 # -------------------------------------------------
 # 3️⃣  Helper functions
@@ -38,7 +38,7 @@ def mesg1():
         {
             "role": "user",
             "content": [
-                {"type": "image", "image": img},
+                {"type": "image", "url": url1},
                 {"type": "text", "text": txt},
             ],
         }
